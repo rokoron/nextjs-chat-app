@@ -10,7 +10,7 @@ const updateMessageSchema = z.object({
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { messageId: string } }
 ) {
   try {
     const user = await getAuthUser(request)
@@ -25,7 +25,7 @@ export async function PUT(
     const { content } = updateMessageSchema.parse(body)
 
     const message = await prisma.message.findUnique({
-      where: { id: params.id },
+      where: { id: params.messageId },
     })
 
     if (!message) {
@@ -43,7 +43,7 @@ export async function PUT(
     }
 
     const updatedMessage = await prisma.message.update({
-      where: { id: params.id },
+      where: { id: params.messageId },
       data: { content },
       include: {
         user: {
@@ -89,7 +89,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { messageId: string } }
 ) {
   try {
     const user = await getAuthUser(request)
@@ -101,7 +101,7 @@ export async function DELETE(
     }
 
     const message = await prisma.message.findUnique({
-      where: { id: params.id },
+      where: { id: params.messageId },
     })
 
     if (!message) {
@@ -119,13 +119,13 @@ export async function DELETE(
     }
 
     await prisma.message.update({
-      where: { id: params.id },
+      where: { id: params.messageId },
       data: { deletedAt: new Date() },
     })
 
     sseManager.broadcast(message.channelId, {
       type: 'message_deleted',
-      data: { messageId: params.id, channelId: message.channelId },
+      data: { messageId: params.messageId, channelId: message.channelId },
     })
 
     return NextResponse.json({ message: 'メッセージを削除しました' })
