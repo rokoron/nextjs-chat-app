@@ -127,7 +127,7 @@ export default function ChannelList({ selectedChannel, onSelectChannel }: Channe
                   onChange={(e) => setChannelName(e.target.value)}
                   required
                   placeholder="例: general"
-                  className="w-full rounded border border-gray-300 px-3 py-2 focus:border-purple-500 focus:outline-none"
+                  className="w-full rounded border border-gray-300 px-3 py-2 text-gray-900 focus:border-purple-500 focus:outline-none"
                 />
               </div>
               <div className="mb-4">
@@ -139,7 +139,7 @@ export default function ChannelList({ selectedChannel, onSelectChannel }: Channe
                   value={channelDescription}
                   onChange={(e) => setChannelDescription(e.target.value)}
                   placeholder="チャンネルの説明"
-                  className="w-full rounded border border-gray-300 px-3 py-2 focus:border-purple-500 focus:outline-none"
+                  className="w-full rounded border border-gray-300 px-3 py-2 text-gray-900 focus:border-purple-500 focus:outline-none"
                 />
               </div>
               <div className="mb-4">
