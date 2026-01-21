@@ -67,8 +67,12 @@ npm run dev
 
 1. [Vercel Dashboard](https://vercel.com/dashboard)にログイン
 2. 「Storage」タブを開く
-3. 「Create Database」→「Postgres」を選択
-4. データベースを作成
+3. 「Marketplace Database Providers」セクションから以下いずれかを選択：
+   - **Prisma Postgres**（推奨：Prismaと統合済み）
+   - **Neon**（Serverless Postgres、無料プランあり）
+   - **Supabase**（Postgresベース、追加機能あり）
+4. 選択したプロバイダーでアカウントを作成・接続
+5. データベースを作成
 
 ### 2. 環境変数の設定
 
