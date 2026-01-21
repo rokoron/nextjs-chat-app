@@ -10,7 +10,7 @@ const createMessageSchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { channelId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const user = await getAuthUser(request)
@@ -27,7 +27,7 @@ export async function GET(
     const offset = (page - 1) * limit
 
     const channel = await prisma.channel.findUnique({
-      where: { id: params.channelId },
+      where: { id: params.id },
     })
 
     if (!channel) {
@@ -41,7 +41,7 @@ export async function GET(
       const member = await prisma.channelMember.findUnique({
         where: {
           channelId_userId: {
-            channelId: params.channelId,
+            channelId: params.id,
             userId: user.id,
           },
         },
@@ -57,7 +57,7 @@ export async function GET(
     const [messages, total] = await Promise.all([
       prisma.message.findMany({
         where: {
-          channelId: params.channelId,
+          channelId: params.id,
           deletedAt: null,
         },
         include: {
@@ -85,7 +85,7 @@ export async function GET(
       }),
       prisma.message.count({
         where: {
-          channelId: params.channelId,
+          channelId: params.id,
           deletedAt: null,
         },
       }),
@@ -108,7 +108,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { channelId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const user = await getAuthUser(request)
@@ -123,7 +123,7 @@ export async function POST(
     const { content } = createMessageSchema.parse(body)
 
     const channel = await prisma.channel.findUnique({
-      where: { id: params.channelId },
+      where: { id: params.id },
     })
 
     if (!channel) {
@@ -137,7 +137,7 @@ export async function POST(
       const member = await prisma.channelMember.findUnique({
         where: {
           channelId_userId: {
-            channelId: params.channelId,
+            channelId: params.id,
             userId: user.id,
           },
         },
@@ -152,7 +152,7 @@ export async function POST(
       const member = await prisma.channelMember.findUnique({
         where: {
           channelId_userId: {
-            channelId: params.channelId,
+            channelId: params.id,
             userId: user.id,
           },
         },
@@ -160,7 +160,7 @@ export async function POST(
       if (!member) {
         await prisma.channelMember.create({
           data: {
-            channelId: params.channelId,
+            channelId: params.id,
             userId: user.id,
           },
         })
@@ -169,7 +169,7 @@ export async function POST(
 
     const message = await prisma.message.create({
       data: {
-        channelId: params.channelId,
+        channelId: params.id,
         userId: user.id,
         content,
       },
@@ -194,7 +194,7 @@ export async function POST(
       },
     })
 
-    sseManager.broadcast(params.channelId, {
+    sseManager.broadcast(params.id, {
       type: 'new_message',
       data: message,
     })

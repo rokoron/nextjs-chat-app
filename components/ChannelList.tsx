@@ -99,7 +99,7 @@ export default function ChannelList({ selectedChannel, onSelectChannel }: Channe
             >
               <div className="flex items-center gap-2">
                 <span className="font-bold text-gray-400">#</span>
-                <span className="flex-1">{channel.name}</span>
+                <span className="flex-1 text-white">{channel.name}</span>
                 {channel.isPrivate && <span>🔒</span>}
               </div>
             </div>
